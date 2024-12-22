@@ -3,13 +3,15 @@ package com.example.demo.entity;
 import java.sql.Timestamp;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
 
+@MappedSuperclass
 public class AuditEntity {
 
-    @Column(name = "created_on")
-    private Timestamp createdOn;
+    @Column(name = "created_at")
+    private Timestamp createdAt;
 
-    public Timestamp getCreatedOn(){ return this.createdOn; }
+    public Timestamp getCreatedAt(){ return this.createdAt; }
 
-    public void setCreatedOn(Timestamp createdOn) { this.createdOn = createdOn; }
+    public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
 }

@@ -2,6 +2,8 @@ package com.example.demo.controller.dto.response;
 
 import java.math.BigDecimal;
 
+import com.example.demo.entity.Product;
+
 public class ProductResponseDto {
     private Long id;
     private String name;
@@ -16,6 +18,13 @@ public class ProductResponseDto {
         this.name = name;
         this.description = description;
         this.price = price;
+    }
+
+    public ProductResponseDto(Product product){
+        this.id = product.getId();
+        this.name = product.getName();
+        this.description = product.getDescription();
+        this.price = product.getPrice();
     }
 
     public Long getId() {

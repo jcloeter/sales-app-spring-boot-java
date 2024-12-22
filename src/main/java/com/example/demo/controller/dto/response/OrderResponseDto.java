@@ -2,21 +2,34 @@ package com.example.demo.controller.dto.response;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import com.example.demo.entity.Order;
 
 public class OrderResponseDto {
     private Long id;
     private Long clientId;
-    private Timestamp createdOn;
-    private List<ProductResponseDto> productList;
+    private Timestamp createdAt;
+    private List<ProductResponseDto> products;
 
     public OrderResponseDto() {
     }
 
-    public OrderResponseDto(Long id, Long clientId, Timestamp createdOn, List<ProductResponseDto> productList) {
+    public OrderResponseDto(Long id, Long clientId, Timestamp createdAt, List<ProductResponseDto> products) {
         this.id = id;
         this.clientId = clientId;
-        this.createdOn = createdOn;
-        this.productList = productList;
+        this.createdAt = createdAt;
+        this.products = products;
+    }
+
+    public OrderResponseDto(Order order){
+        this.id = order.getId();
+        this.clientId = order.getUserId();
+        this.createdAt = order.getCreatedAt();
+        this.products = order.getProducts()
+                .stream()
+                .map(ProductResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     public Long getId() {
@@ -35,19 +48,19 @@ public class OrderResponseDto {
         this.clientId = clientId;
     }
 
-    public Timestamp getCreatedOn() {
-        return createdOn;
+    public Timestamp getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreatedOn(Timestamp createdOn) {
-        this.createdOn = createdOn;
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public List<ProductResponseDto> getProductList() {
-        return productList;
+    public List<ProductResponseDto> getProducts() {
+        return products;
     }
 
-    public void setProductList(List<ProductResponseDto> productList) {
-        this.productList = productList;
+    public void setProducts(List<ProductResponseDto> products) {
+        this.products = products;
     }
 }

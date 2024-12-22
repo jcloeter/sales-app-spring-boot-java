@@ -1,11 +1,15 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import com.example.demo.controller.dto.request.CreateOrderRequestDto;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.controller.dto.response.OrderResponseDto;
 import com.example.demo.entity.Order;
 import com.example.demo.repository.OrderRepository;
 
+@Service
 public class OrderService {
     
     private final OrderRepository orderRepository;
@@ -14,12 +18,18 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
+    // Modify this return type...
     public List<OrderResponseDto> getOrders(){
-        return orderRepository.findAll();
+        List<Order> orders = orderRepository.findAll();
+        List<OrderResponseDto> response = orders
+            .stream()
+            .map(OrderResponseDto::new)
+            .collect(Collectors.toList());
+        return response;
     }
 
-    public OrderResponseDto createOrder(CreateOrderRequestDto request){
+    // public OrderResponseDto createOrder(CreateOrderRequestDto request){
         
-    }
+    // }
 
 }

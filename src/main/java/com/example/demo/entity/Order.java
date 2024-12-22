@@ -1,10 +1,15 @@
 package com.example.demo.entity;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 
@@ -19,15 +24,17 @@ public class Order extends AuditEntity{
     @Column(name = "user_id")
     private Long userId;
 
-    // @Column(name = "created_on")
-    // private Timestamp createdOn;
+    @ManyToMany
+    @JoinTable(
+        name = "product_order",
+        // The column in product_order that references this entity
+        joinColumns = @JoinColumn(name = "order_id"), 
+        // The column in product_order that references the other entity 
+        inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private List<Product> products;
 
     public Order(){}
-
-    // public Order(Long userId, Timestamp createdOn){
-    //     this.userId = userId;
-    //     this.createdOn = createdOn;
-    // }
 
     public void setId(Long id){ this.id = id; }
 
@@ -37,7 +44,8 @@ public class Order extends AuditEntity{
 
     public Long getUserId(){ return this.userId; }
 
-    // public Timestamp getCreatedOn(){ return this.createdOn; }
+    public List<Product> getProducts(){ return this.products; }
 
-    // public void setCreatedOn(Timestamp createdOn) { this.createdOn = createdOn; }
+    public void setProducts(List<Product> products){ this.products = products; }
+
 }
