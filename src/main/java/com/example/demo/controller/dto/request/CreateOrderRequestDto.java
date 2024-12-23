@@ -3,17 +3,17 @@ package com.example.demo.controller.dto.request;
 import java.util.List;
 
 public class CreateOrderRequestDto {
-    private final Long clientId;
+    private final Long userId;
 
     private final List<Long> productIds;
 
-    public CreateOrderRequestDto(Long clientId, List<Long> productIds){
-        this.clientId = clientId;
+    public CreateOrderRequestDto(Long userId, List<Long> productIds){
+        this.userId = userId;
         this.productIds = productIds;
     }
 
-    public Long getClientId() {
-        return clientId;
+    public Long getUserId() {
+        return userId;
     }
 
     public List<Long> getProductIds() {
