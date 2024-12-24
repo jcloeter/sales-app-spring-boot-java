@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.controller.dto.request.CreateOrderRequestDto;
 import com.example.demo.controller.dto.response.OrderResponseDto;
+import com.example.demo.entity.Order;
 import com.example.demo.service.OrderService;
 
 @RestController
@@ -23,6 +24,13 @@ public class OrderController {
 
     public OrderController(OrderService orderService){
         this.orderService = orderService;
+    }
+
+    // Note: Use @PathVariable, not @PathParam
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderResponseDto> getOrderById(@PathVariable Long id){
+        Order order = orderService.getOrderById(id);
+        return new ResponseEntity<>(new OrderResponseDto(order), HttpStatus.OK);
     }
 
     @GetMapping
@@ -49,8 +57,9 @@ public class OrderController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }   
 
-    // Update Order- only for current user though OR if user is admin they can update anyone's
-
-    // Get Order By Id
+    // TODO: 
+        // Add scope so users can only get orders, update orders, or create orders for themselves
+        // Add authorization so only admin users can see all orders
+        // Allow only admins to update Products     
     
 }

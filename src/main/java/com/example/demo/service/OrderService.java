@@ -32,6 +32,17 @@ public class OrderService {
         this.productRepository = productRepository;
     }
 
+    public Order getOrderById(Long orderId){
+        Optional<Order> order = orderRepository.findById(orderId);
+
+        if (order.isEmpty()){
+            LOGGER.warning("No order found for id: " + orderId);
+            throw new InvalidInputException("No order found for id: " + orderId);
+        } else {
+            return order.get();
+        }
+    }
+
     public List<OrderResponseDto> getOrders(){
         List<Order> orders = orderRepository.findAll();
         List<OrderResponseDto> response = orders

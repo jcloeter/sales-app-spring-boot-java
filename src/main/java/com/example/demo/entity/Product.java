@@ -2,7 +2,8 @@ package com.example.demo.entity;
 
 import java.math.BigDecimal;
 
-import jakarta.persistence.Column;
+import com.example.demo.controller.dto.request.CreateProductRequestDto;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,6 +30,12 @@ public class Product extends AuditEntity {
         this.name = name;
         this.description = description;
         this.price = price;
+    }
+
+    public Product(CreateProductRequestDto requestDto) {
+        this.name = requestDto.getName();
+        this.description = requestDto.getDescription();
+        this.price = requestDto.getPrice();
     }
 
     public Long getId() {

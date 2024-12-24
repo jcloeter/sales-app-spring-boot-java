@@ -33,8 +33,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(InvalidInputException.class) // 400
+    @ExceptionHandler(InvalidInputException.class) // 404
     public ResponseEntity<ExceptionResponse> handleInvalidInputException(Exception ex){
-        return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()), HttpStatus.NOT_FOUND);
     }
 }
