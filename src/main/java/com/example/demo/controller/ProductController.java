@@ -70,8 +70,6 @@ public class ProductController {
         return new ResponseEntity<>(new ProductResponseDto(product), HttpStatus.OK);
     }
 
-
-    
     
     // TODO: Add ability to search, paginate, and filter here.
     // Add a parent controller to add /api in front
