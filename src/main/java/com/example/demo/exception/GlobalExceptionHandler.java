@@ -37,4 +37,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleInvalidInputException(Exception ex){
         return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(UnauthorizedException.class) // 401
+    public ResponseEntity<ExceptionResponse> handleUnauthorizedException(Exception ex){
+        return new ResponseEntity<>(new ExceptionResponse(ex.getMessage()), HttpStatus.UNAUTHORIZED);
+    }
 }

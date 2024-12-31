@@ -40,15 +40,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 
         logger.info("do filter internal is getting called...");
 
-        String testJwt = jwtTokenProvider.generateToken("John", "Cloeter");
+        String testJwt = jwtTokenProvider.generateToken("j@gmail.com");
 // Start here by getting these methods working. Might need real jwt created from this package?
         // String jwt = getJwtFromRequest(httpServletRequest);
         // String userName = jwtTokenProvider.getUsernameFromToken(testJwt);
         // String scope = jwtTokenProvider.getScopeFromToken(jwt);
 
-        String username = "John C"
+        String username = "jcloeter@gmail.com";
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));

@@ -1,6 +1,8 @@
 package com.example.demo.security;
 
-public enum AuthorizationRole {
+import org.springframework.security.core.GrantedAuthority;
+
+public enum AuthorizationRole implements GrantedAuthority{
     
     USER("User", "Shopper"),
     MERCHANT("Merchant", "Sells and manages their products"),
@@ -14,5 +16,11 @@ public enum AuthorizationRole {
 
     public final String name;
     public final String description;
+
+    // TODO: This needs to be updated
+    @Override
+    public String getAuthority(){
+        return USER.toString();
+    }
 
 }

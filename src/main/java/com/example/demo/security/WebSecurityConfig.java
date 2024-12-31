@@ -5,12 +5,16 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import com.example.demo.service.OrderService;
 
 // Spring Security released a new way that requires a method, SecurityFilterChain filterChain(HttpSecurity) instead of the deprecated void configure() approach.
 
@@ -24,52 +28,50 @@ public class WebSecurityConfig {
  
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    @Autowired
-    public WebSecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter){
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-    }
+    private UserDetailsService userDetailsService;  
 
-    @Bean
-    public SecurityFilterChain filterChain2(HttpSecurity http, OrderService orderService) throws Exception {
-        return http.build();
+    @Autowired
+    public WebSecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, UserDetailsService userDetailsService){
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.userDetailsService = userDetailsService;
     }
     
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(authorize -> authorize
-                        // .anyRequest().permitAll()
-                        .anyRequest().authenticated()
-                )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-                // .httpBasic(Customizer.withDefaults()) //This uses really basic username and passwords to be sent in with the headers 
-
+            .authorizeHttpRequests(authorize -> authorize
+                // .requestMatchers("/api/auth/login").permitAll()
+                // .antMatchers("/api/auth/login").permitAll() // Allow login endpoint
+                // .anyRequest().authenticated()
+                // Example:
+                // .requestMatchers("/endpoint").hasAuthority("USER")
+                .anyRequest().permitAll()
+        )    
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        // .httpBasic(Customizer.withDefaults()) //This uses really basic username and passwords to be sent in with the headers 
                 
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        // http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-
-    // @Bean
-    // private UserDetailsService userDetailsService(){
-    //     UserDetails user = User.with
-    // }
-
+    @Bean
+    public AuthenticationManager authenticationManagerBean(HttpSecurity http) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+            .userDetailsService(userDetailsService)
+            .passwordEncoder(passwordEncoder())
+            .and()
+            .build();
+    }
 
     // @Bean
     // public UserDetailsService userDetailsService(){
-    //     // It is deprecated but just using this locally for now
-
-    //     UserDetails user;
-    //     user = User.withDefaultPasswordEncoder()
-    //             .username("admin")
-    //             .password("admin123")
-    //             .roles("USER")
-    //             .build();
-            
-    //         return new InMemoryUserDetailsManager(user);  
+    //     return new UserDetailServiceImpl();
     // }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }
