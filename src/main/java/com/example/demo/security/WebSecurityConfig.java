@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 // Spring Security released a new way that requires a method, SecurityFilterChain filterChain(HttpSecurity) instead of the deprecated void configure() approach.
 
@@ -43,9 +44,13 @@ public class WebSecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 // .requestMatchers("/api/auth/login").permitAll()
                 // .antMatchers("/api/auth/login").permitAll() // Allow login endpoint
-                // .anyRequest().authenticated()
                 // Example:
                 // .requestMatchers("/endpoint").hasAuthority("USER")
+
+                // These two work decently well:
+                // .requestMatchers(new AntPathRequestMatcher("/api/auth/login")).permitAll()
+                // .anyRequest().authenticated()
+
                 .anyRequest().permitAll()
         )    
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
@@ -64,11 +69,6 @@ public class WebSecurityConfig {
             .and()
             .build();
     }
-
-    // @Bean
-    // public UserDetailsService userDetailsService(){
-    //     return new UserDetailServiceImpl();
-    // }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

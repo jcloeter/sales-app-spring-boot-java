@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.controller.dto.request.LoginRequestDto;
+import com.example.demo.controller.dto.response.LoginResponseDto;
 import com.example.demo.security.JwtTokenProvider;
 
 @RestController
@@ -31,24 +32,20 @@ public class AuthController {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    // First draft only...
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequestDto loginRequestDto){
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto){
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword())
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        Long tokenExpiration = jwtTokenProvider.getTokenExpirationLength(); // 60 minutes
         String token = jwtTokenProvider.generateToken(loginRequestDto.getEmail());
+        String tokenType = "Bearer";
+        String refreshToken = "";
 
-        return new ResponseEntity<>(token, HttpStatus.OK);
+        return new ResponseEntity<>(new LoginResponseDto(token, tokenType, tokenExpiration, refreshToken), HttpStatus.OK);
     }
-}
 
-        // String jwt = jwtTokenProvider.generateToken("Harry", "Kane");
-        // logger.info(jwt);
-        // Boolean isValidJwt = jwtTokenProvider.validateToken(jwt);
-        // String username = jwtTokenProvider.getUsernameFromToken(jwt);
-        // logger.info(username);
-        // String scope = jwtTokenProvider.getScopeFromToken(jwt);
+}

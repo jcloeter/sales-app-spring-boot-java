@@ -37,6 +37,10 @@ public class JwtTokenProvider {
         return jwt;    
     }
 
+    public Long getTokenExpirationLength(){
+        return this.jwtExpiration;
+    }
+
     public Boolean validateToken(String token){
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
@@ -53,7 +57,6 @@ public class JwtTokenProvider {
             .getBody();
 
         return claim.getSubject();
-        // return claim.get("foo", String.class);    
     }
 
     public String getScopeFromToken(String token){

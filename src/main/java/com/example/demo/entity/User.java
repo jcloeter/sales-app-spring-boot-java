@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.example.demo.controller.dto.request.CreateUserRequestDto;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,6 +32,12 @@ public class User extends AuditEntity{
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+    }
+
+    public User(CreateUserRequestDto dto){
+        this.firstName = dto.getFirstName();
+        this.lastName = dto.getLastName();
+        this.email = dto.getEmail();
     }
 
     public Long getId() {
