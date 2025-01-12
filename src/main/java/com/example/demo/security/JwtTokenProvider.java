@@ -18,14 +18,14 @@ public class JwtTokenProvider {
     @Value("${jwt.expiration}")
     private Long jwtExpiration;
 
-    public String generateToken(String email){
+    public String generateToken(String email, String role){
         Date now = new Date();
         Date expirationDate = new Date(now.getTime() + jwtExpiration);
 
         String jwt = Jwts.builder()
             .setIssuer("X-sales-app-api")
             .setSubject(email)  
-            .claim("scope", AuthorizationRole.ADMIN)
+            .claim("scope", role)
             .setIssuedAt(now)
             .setExpiration(expirationDate)
             .signWith(

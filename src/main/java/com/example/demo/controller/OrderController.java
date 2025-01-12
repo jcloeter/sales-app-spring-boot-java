@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +34,7 @@ public class OrderController {
         return new ResponseEntity<>(new OrderResponseDto(order), HttpStatus.OK);
     }
 
+    @Secured("ROLE_SUPER_ADMIN")
     @GetMapping
     public List<OrderResponseDto> getAllOrders(){
         return orderService.getOrders();
@@ -45,6 +47,7 @@ public class OrderController {
         return orderService.createOrder(request);
     }
 
+    @Secured("ROLE_ADMIN")
     @PatchMapping("/{id}")
     public ResponseEntity<OrderResponseDto> updateOrder(
         @PathVariable Long id,

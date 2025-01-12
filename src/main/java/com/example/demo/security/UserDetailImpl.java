@@ -1,18 +1,19 @@
 package com.example.demo.security;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.example.demo.entity.Role;
+
 public class UserDetailImpl implements UserDetails{
 
     private String email;
     private String password;
-    private List<AuthorizationRole> authorities = Arrays.asList(AuthorizationRole.values());
+    private List<Role> authorities;
 
-    public UserDetailImpl(String email, String password, List<AuthorizationRole> authorities){
+    public UserDetailImpl(String email, String password, List<Role> authorities){
         this.email = email;
         this.password = password;
         this.authorities = authorities;
@@ -46,8 +47,7 @@ public class UserDetailImpl implements UserDetails{
         this.password = password;
     }
 
-    public void setAuthorities(List<AuthorizationRole> authorities) {
+    public void setAuthorities(List<Role> authorities) {
         this.authorities = authorities;
     }
-
 }

@@ -5,8 +5,11 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -23,6 +26,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(securedEnabled = true) // Allows us to use @Secured?
 public class WebSecurityConfig {
 
     private final static Logger logger = Logger.getLogger(WebSecurityConfig.class.getName());
@@ -40,23 +44,15 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(authorize -> authorize
-                // .requestMatchers("/api/auth/login").permitAll()
-                // .antMatchers("/api/auth/login").permitAll() // Allow login endpoint
-                // Example:
-                // .requestMatchers("/endpoint").hasAuthority("USER")
-
-                // These two work decently well:
-                // .requestMatchers(new AntPathRequestMatcher("/api/auth/login")).permitAll()
-                // .anyRequest().authenticated()
-
-                .anyRequest().permitAll()
-        )    
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        // .httpBasic(Customizer.withDefaults()) //This uses really basic username and passwords to be sent in with the headers 
+        http.csrf(csrf -> csrf.disable());
+        http.authorizeHttpRequests(authorize -> authorize
+            .requestMatchers("/api/auth/login").permitAll()
+            .anyRequest().permitAll()
+            // .requestMatchers("/api/order/**").permitAll()
+            )
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
                 
-        // http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -69,6 +65,13 @@ public class WebSecurityConfig {
             .and()
             .build();
     }
+
+    // @Bean
+    // public RoleHierarchyImpl roleHierarchy() {
+    //     String hierarchy = "ROLE_SUPER_ADMIN > ROLE_ADMIN\nROLE_ADMIN > ROLE_MERCHANT\nROLE>MERCHANT >ROLE_USER";
+    //     RoleHierarchyImpl roleHierarchy = RoleHierarchyImpl.fromHierarchy(hierarchy);
+    //     return roleHierarchy;
+    // }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

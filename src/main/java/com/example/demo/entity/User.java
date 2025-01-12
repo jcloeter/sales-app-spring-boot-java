@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -24,14 +25,18 @@ public class User extends AuditEntity{
 
     private String password;
 
+    @ManyToOne()
+    private Role role; 
+
     public User() {
     }
 
-    public User(String firstName, String lastName, String email, String password) {
+    public User(String firstName, String lastName, String email, String password, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
     public User(CreateUserRequestDto dto){
@@ -78,5 +83,13 @@ public class User extends AuditEntity{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setRole(Role role){
+        this.role = role;
+    }
+
+    public Role getRole(){
+        return this.role;
     }
 }

@@ -1,7 +1,7 @@
 package com.example.demo.security;
 
 import org.springframework.security.core.GrantedAuthority;
-
+// TODO: Delete this whole class?
 public enum AuthorizationRole implements GrantedAuthority{
     
     USER("User", "Shopper"),

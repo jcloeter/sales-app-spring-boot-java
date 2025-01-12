@@ -1,0 +1,15 @@
+UPDATE role
+SET name = 'ROLE_USER'
+WHERE name = 'USER';
+
+UPDATE role
+SET name = 'ROLE_MERCHANT'
+WHERE name = 'MERCHANT';
+
+UPDATE role
+SET name = 'ROLE_ADMIN'
+WHERE name = 'ADMIN';
+
+UPDATE role
+SET name = 'ROLE_SUPER_ADMIN'
+WHERE name = 'SUPER_ADMIN';
