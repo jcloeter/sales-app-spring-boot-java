@@ -27,25 +27,25 @@ public class AuthController {
 
     private final static Logger logger = Logger.getLogger(AuthController.class.getName());
 
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    private JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserRepository userRepository){
+    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserRepository userRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userRepository = userRepository;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto){
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
         logger.info(String.format("Login request sent in for user %s", loginRequestDto.getEmail()));
 
         try {
             Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword())
+                    new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword())
             );
             // This auth object contains info about the user.
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -58,12 +58,12 @@ public class AuthController {
             String refreshToken = "";
 
             return new ResponseEntity<>(new LoginResponseDto(token, tokenType, tokenExpiration, refreshToken), HttpStatus.OK);
-        } catch(Exception e){
+        } catch (Exception e) {
             logger.info(String.format("There was an error logging in user %s: %s", loginRequestDto.getEmail(), e.getMessage()));
 
             throw new UnauthorizedException("Invalid username or password");
         }
-        
+
     }
 
 }

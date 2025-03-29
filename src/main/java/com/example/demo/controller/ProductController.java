@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,7 +40,7 @@ public class ProductController {
 
     @Secured("ROLE_USER")
     @GetMapping()
-    public ResponseEntity<List<ProductResponseDto>> getAllProducts(){
+    public ResponseEntity<List<ProductResponseDto>> getAllProducts(@AuthenticationPrincipal UserDetails userDetails){
         List<Product> products = productService.getAllProducts();
 
         List<ProductResponseDto> productResponseDto = products
@@ -64,7 +66,6 @@ public class ProductController {
         return new ResponseEntity<>(new ProductResponseDto(product), HttpStatus.CREATED);
     }   
 
-    // PUT vs PATCH depends on partial update or not...
     @Secured("ROLE_MERCHANT")
     @PatchMapping("/{id}")
     public ResponseEntity<ProductResponseDto> updateProduct(

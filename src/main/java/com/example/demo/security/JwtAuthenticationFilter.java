@@ -67,7 +67,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         throws ServletException {
         String path = request.getRequestURI();
 
-        return "/api/user".equals(path) || "/api/auth/login".equals(path);
+        return "/api/user".equals(path) || "/api/auth/login".equals(path) || "/v3/api-docs".equals(path);
     }
 
     private String getJwtFromRequest(HttpServletRequest httpServletRequest){

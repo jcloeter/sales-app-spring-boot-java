@@ -32,6 +32,7 @@ public class UserDetailServiceImpl implements UserDetailsService{
         List<Role> currentUserRoles = user.get().getRole().getCurrentUserRoles();
 
         return new UserDetailImpl(
+            user.get().getId(),
             user.get().getEmail(),
             user.get().getPassword(),
             currentUserRoles

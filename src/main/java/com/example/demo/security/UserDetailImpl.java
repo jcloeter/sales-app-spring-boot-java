@@ -9,11 +9,13 @@ import com.example.demo.entity.Role;
 
 public class UserDetailImpl implements UserDetails{
 
+    private Long id;
     private String email;
     private String password;
     private List<Role> authorities;
 
-    public UserDetailImpl(String email, String password, List<Role> authorities){
+    public UserDetailImpl(Long id, String email, String password, List<Role> authorities){
+        this.id = id;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
@@ -33,6 +35,14 @@ public class UserDetailImpl implements UserDetails{
     @Override
     public List<? extends GrantedAuthority> getAuthorities() {
         return authorities;
+    }
+
+    public Long getId(){
+        return this.id;
+    }
+
+    public void setId(Long id){
+        this.id = id;
     }
 
     public String getEmail() {
